@@ -32,7 +32,7 @@ One of the issues I have had is understanding which stocks to pick for long-term
  
  I plan to build a Python script that, using 20 predefined stocks, checks their factors, such as each ticker's payout ratio, from an external public API. This is then used to evaluate the ticker as safe or risky for investment. The API used pulls live data from a free API (yfinance) to keep it up to date. This evaluation of safety or risk is based on classifying a payout ratio of 60% or higher as 'safe.' 
 
-![System diagram]()
+![System diagram](System%20Diagram.png)
  
 ## Tech Stack
  
