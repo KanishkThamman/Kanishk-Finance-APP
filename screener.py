@@ -17,7 +17,7 @@ def fetch_payout_ratio(ticker):
 def classify(ratio): # using ratios given, classify each as 'safe' 'risky' or just skipped
     if ratio is None:
         return "skipped"
-    return "safe" if ratio <= THRESHOLD else "risky"
+    return "safe" if 0 <= ratio <= THRESHOLD else "risky" # fixes Issue#6 and checks for negetive numbers to prevent incorrect classifiation
 
 
 def main(): # main func! here is where the pizzaz happens :) (we need some fun in coding comments!)
