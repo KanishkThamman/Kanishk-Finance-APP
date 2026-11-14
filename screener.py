@@ -3,6 +3,7 @@ import yfinance as yf # import finance API
 
 TICKERS = [ "KO", "PEP", "JNJ", "PG", "MMM", "T", "VZ", "XOM", "CVX", "IBM","MCD", "WMT", "HD", "ABBV", "PFE", "MRK", "O", "MO", "PM", "CL",] # hard coding tickers for MVP 
 THRESHOLD = 0.60  # payout ratio <= 60% is Safe
+NO_DIVIDEND = "no record of dividend payout"
 
 
 def fetch_payout_ratio(ticker):
@@ -17,11 +18,13 @@ def fetch_payout_ratio(ticker):
 def classify(ratio): # using ratios given, classify each as 'safe' 'risky' or just skipped
     if ratio is None:
         return "skipped"
-    return "safe" if 0 <= ratio <= THRESHOLD else "risky" # fixes Issue#6 and checks for negetive numbers to prevent incorrect classifiation
+    if ratio == 0:
+        return NO_DIVIDEND # fixes Issue#8: 0% payout means no dividend, and is not an indication of the stock being 'safe' or 'unsafe' (also has a risk of confusing user since no divident does not mean that the stock is 'unsafe')
+    return "safe" if 0 < ratio <= THRESHOLD else "risky" # fixes Issue#6 and checks for negetive numbers to prevent incorrect classifiation
 
 
 def main(): # main func! here is where the pizzaz happens :) (we need some fun in coding comments!)
-    groups = {"safe": [], "risky": [], "skipped": []} # init dict that will be used for classify tickers into their groups
+    groups = {"safe": [], "risky": [], NO_DIVIDEND: [], "skipped": []} # init dict that will be used for classify tickers into their groups (added new classification to fix issue#8)
     for ticker in TICKERS: # iterate through hard coded ticker list and get the payout ratio and group it into its respective types ('safe', 'risky', and 'skipped')
         ratio = fetch_payout_ratio(ticker)
         groups[classify(ratio)].append((ticker, ratio))

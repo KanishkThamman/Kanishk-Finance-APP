@@ -1,5 +1,5 @@
 # Kanishk-Finance-APP
-A Python cmd tool that checks dividend stocks and tells the user if each one as safe or risky. All based on how likely it is to cut its dividend.
+A Python cmd tool that checks dividend stocks and tells the user if each one is safe, risky, or has no record of a dividend payout. All based on how likely it is to cut its dividend.
  
 ## The Problem (Project Goal)
  
@@ -17,7 +17,7 @@ One of the issues I have had is understanding which stocks to pick for long-term
 - Pull the data for each ticker from a free api
 - Do data cleaning and skip tickers with missing data rather than assuming
 - Printing Raw Dataframe post data cleaning step to have some output that we can verify
-- Test factors like 60% payout ratio > safe. 
+- Test factors like a payout ratio between 0% and 60% is safe. Negative or above 60% is risky. Exactly 0%  is no record of dividend payout (not 'risky', since the stock itself may still be an ok investment). 
 
 **Out of scope**
  
@@ -30,7 +30,7 @@ One of the issues I have had is understanding which stocks to pick for long-term
 - Judge safety with more than payout ratio alone.
 - Allow Export
  
- I plan to build a Python script that, using 20 predefined stocks, checks their factors, such as each ticker's payout ratio, from an external public API. This is then used to evaluate the ticker as safe or risky for investment. The API used pulls live data from a free API (yfinance) to keep it up to date. This evaluation of safety or risk is based on classifying a payout ratio of 60% or higher as 'safe.' 
+ I plan to build a Python script that, using 20 predefined stocks, checks their factors, such as each ticker's payout ratio, from an external public API. This is then used to evaluate the ticker as safe, risky for investment, or not having a divident record. The API used pulls live data from a free API (yfinance) to keep it up to date. This evaluation of safety or risk is based on classifying a payout ratio of 60% or higher as 'safe,' negetive numbers mean unsafe, and 0% is classified as having no record of dividend distrebution. Additionaly, stocks with missing data is skipped and the user is notified.
 
 ![System diagram](System%20Diagram.png)
  
