@@ -26,11 +26,10 @@ One of the issues I have had is understanding which stocks to pick for long-term
 ## How It Works
 
 **Future Plans**
-- Let users type in whatever stocks they want instead of only the 20 built in.
 - Judge safety with more than payout ratio alone.
 - Allow Export
  
- I plan to build a Python script that, using 20 predefined stocks, checks their factors, such as each ticker's payout ratio, from an external public API. This is then used to evaluate the ticker as safe, risky for investment, or not having a divident record. The API used pulls live data from a free API (yfinance) to keep it up to date. This evaluation of safety or risk is based on classifying a payout ratio of 60% or higher as 'safe,' negetive numbers mean unsafe, and 0% is classified as having no record of dividend distrebution. Additionaly, stocks with missing data is skipped and the user is notified.
+ I plan to build a Python script that, using stocks the user types in, checks their factors, such as each ticker's payout ratio, from an external public API. This is then used to evaluate the ticker as safe, risky for investment, or not having a divident record. The API used pulls live data from a free API (yfinance) to keep it up to date. This evaluation of safety or risk is based on classifying a payout ratio of 60% or higher as 'safe,' negetive numbers mean unsafe, and 0% is classified as having no record of dividend distrebution. Additionaly, stocks with missing data is skipped and the user is notified.
 
 ![System diagram](System%20Diagram.png)
  

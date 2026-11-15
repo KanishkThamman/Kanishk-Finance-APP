@@ -3,7 +3,6 @@ import yfinance as yf # import finance API
 
 logging.getLogger("yfinance").setLevel(logging.CRITICAL) # silence yfinance's raw 404 output (Look at Issue#4 for more info)
 
-TICKERS = [ "KO", "PEP", "JNJ", "PG", "MMM", "T", "VZ", "XOM", "CVX", "IBM","MCD", "WMT", "HD", "ABBV", "PFE", "MRK", "O", "MO", "PM", "CL",] # hard coding tickers for MVP 
 THRESHOLD = 0.60  # payout ratio <= 60% is Safe
 NO_DIVIDEND = "no record of dividend payout"
 
@@ -17,6 +16,17 @@ def fetch_payout_ratio(ticker):
     except Exception:  # network/API failure and 404s will treat ticker as missing. Fixes issue#4
         print(f"warn: {ticker} skipped (not found or data unavailable)")
         return None
+
+
+def get_tickers(): # ask user for tickers, exit with an error if they enter nothing
+    
+    raw = input("Enter tickers separated by spaces or commas: ")
+    tickers = raw.replace(",", " ").upper().split() # input sanitazation to ensure random spaces and commas = multiple tickers at once
+    
+    if not tickers:
+        raise SystemExit("Error: no tickers entered. Please enter at least one ticker.")
+    
+    return list(dict.fromkeys(tickers)) # drops duplicates but keeps order
 
 
 def classify(ratio): # using ratios given, classify each as 'safe' 'risky' or just skipped
@@ -34,7 +44,7 @@ def main(): # main func! here is where the pizzaz happens :) (we need some fun i
     
     groups = {"safe": [], "risky": [], NO_DIVIDEND: [], "skipped": []} # init dict that will be used for classify tickers into their groups (added new classification to fix issue#8)
     
-    for ticker in TICKERS: # iterate through hard coded ticker list and get the payout ratio and group it into its respective types ('safe', 'risky', and 'skipped')
+    for ticker in get_tickers(): # iterate through user's tickers and get the payout ratio and group it into 'safe', 'risky', or 'skipped'
         ratio = fetch_payout_ratio(ticker)
         groups[classify(ratio)].append((ticker, ratio))
 
