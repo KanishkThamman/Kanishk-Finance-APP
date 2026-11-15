@@ -18,7 +18,7 @@ def fetch_payout_ratio(ticker):
         return None
 
 
-def get_tickers(): # ask user for tickers, exit with an error if they enter nothing
+def get_tickers(): # ask user for tickers, exit with an error if they enter nothing (see more info in Issue#11)
     
     raw = input("Enter tickers separated by spaces or commas: ")
     tickers = raw.replace(",", " ").upper().split() # input sanitazation to ensure random spaces and commas = multiple tickers at once
