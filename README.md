@@ -37,7 +37,7 @@ One of the issues I have had is understanding which stocks to pick for long-term
 ## Tech Stack
  
 - **Language:** Python 3.9 or newer
-- **Libraries:** `yfinance` (data), `pandas` (table handling and cleaning)
+- **Libraries:** `yfinance` (data), `pandas` (table handling and cleaning), `logging` (Python standard library, used for error handling)
 - **External tools:** Yahoo Finance data through `yfinance` (free, no API key needed)
 - **Data storage:** none. Data is fetched live on every run and nothing is saved to disk.
 
