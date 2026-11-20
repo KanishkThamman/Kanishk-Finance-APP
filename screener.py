@@ -7,15 +7,14 @@ THRESHOLD = 0.60  # payout ratio <= 60% is Safe
 NO_DIVIDEND = "no record of dividend payout"
 
 
-def fetch_payout_ratio(ticker):
-    """Return payout ratio as a fraction, or None if unavailable."""
-    
+def fetch_factors(ticker): # Return payout_ratio and debt_to_equity, any value not found is reported is None."""
     try: # Used try to ensure that the whole program does not get stoped from one wrong ticker
-        return yf.Ticker(ticker).info.get("payoutRatio") # from given ticker, get its company data and then its payout ratio 
-    
+        info = yf.Ticker(ticker).info # one call per ticker so adding a factor does not add another network request (Issue#13)
+        return {"payout_ratio": info.get("payoutRatio"), "debt_to_equity": info.get("debtToEquity")}
+
     except Exception:  # network/API failure and 404s will treat ticker as missing. Fixes issue#4
         print(f"warn: {ticker} skipped (not found or data unavailable)")
-        return None
+        return {"payout_ratio": None, "debt_to_equity": None}
 
 
 def get_tickers(): # ask user for tickers, exit with an error if they enter nothing (see more info in Issue#11)
@@ -45,7 +44,7 @@ def main(): # main func! here is where the pizzaz happens :) (we need some fun i
     groups = {"safe": [], "risky": [], NO_DIVIDEND: [], "skipped": []} # init dict that will be used for classify tickers into their groups (added new classification to fix issue#8)
     
     for ticker in get_tickers(): # iterate through user's tickers and get the payout ratio and group it into 'safe', 'risky', or 'skipped'
-        ratio = fetch_payout_ratio(ticker)
+        ratio = fetch_factors(ticker)["payout_ratio"] # debt_to_equity is fetched until classification (Issue#13)
         groups[classify(ratio)].append((ticker, ratio))
 
     for name, rows in groups.items(): # iterate the groups dict to print each type of stock to the user
