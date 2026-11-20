@@ -59,9 +59,45 @@ If debt-to-equity is missing (some companies do not report it), that check is ig
 
 ## Setup
  
-Requires Python 3.9+ and an internet connection.
+Requires Python 3.9+, Git, and an internet connection.
 
-_More to be added as we develop_
+1. Clone the repo and move into it:
+   ```
+   git clone https://github.com/KanishkThamman/Kanishk-Finance-APP.git
+   cd Kanishk-Finance-APP
+   ```
+2. Install the dependency:
+   ```
+   pip install -r requirements.txt
+   ```
+3. Run the screener (use `python3` instead of `python` on macOS/Linux if needed):
+   ```
+   python screener.py
+   ```
+4. When prompted, type any stock tickers separated by spaces or commas, then press Enter.
+
+### Example run
+
+Input: `AAPL, KO, MMM, LMT, FAKEXYZ`
+
+```
+Enter tickers separated by spaces or commas: AAPL, KO, MMM, LMT, FAKEXYZ
+
+== SAFE (1) ==
+AAPL     12%  D/E  0.8x
+
+== RISKY (3) ==
+KO       62%  D/E  1.1x  fails: payout ratio
+MMM      46%  D/E  3.0x  fails: debt-to-equity
+LMT      49%  D/E  2.0x  fails: debt-to-equity
+
+== NO RECORD OF DIVIDEND PAYOUT (0) ==
+
+== SKIPPED (1) ==
+FAKEXYZ   n/a  D/E   n/a
+```
+
+Each row shows the ticker, its payout ratio, and its debt-to-equity (D/E). Numbers come from live data, so they change over time. Entering nothing exits with an error message, and a ticker that cannot be found is skipped instead of stopping the run.
  
 ## Author
  
