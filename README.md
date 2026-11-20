@@ -21,7 +21,6 @@ One of the issues I have had is understanding which stocks to pick for long-term
 
 **Out of scope**
  
-- Anything in the Future Plans list
 - ML forecasting from historical data, a mobile app, etc
 ## How It Works
 
