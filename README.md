@@ -26,19 +26,36 @@ One of the issues I have had is understanding which stocks to pick for long-term
 ## How It Works
 
 **Future Plans**
-- Judge safety with more than payout ratio alone.
+- Add more safety factors beyond payout ratio and debt-to-equity (for example interest coverage)
+- Make the thresholds sector-aware, since utilities and telecoms normally carry more debt
 - Allow Export
  
- I plan to build a Python script that, using stocks the user types in, checks their factors, such as each ticker's payout ratio, from an external public API. This is then used to evaluate the ticker as safe, risky for investment, or not having a divident record. The API used pulls live data from a free API (yfinance) to keep it up to date. This evaluation of safety or risk is based on classifying a payout ratio of 60% or higher as 'safe,' negetive numbers mean unsafe, and 0% is classified as having no record of dividend distrebution. Additionaly, stocks with missing data is skipped and the user is notified.
+This is a Python script that takes the tickers the user types in and pulls each one's payout ratio and debt-to-equity from a free public API (yfinance), so the data stays up to date. Each ticker is then sorted into one of four groups:
+
+- **Safe:** payout ratio above 0% and up to 60%, and debt-to-equity at or below 1.7x.
+- **Risky:** payout ratio negative or above 60%, or debt-to-equity above 1.7x (or negative). The output says which check failed.
+- **No record of dividend payout:** a payout ratio of exactly 0%. This is not 'risky', since the stock itself may still be an ok investment.
+- **Skipped:** the ticker was not found or has no payout ratio data, and the user is notified.
+
+If debt-to-equity is missing (some companies do not report it), that check is ignored and the ticker is judged on payout ratio alone. The 1.7x debt limit is a rule of thumb: sources commonly treat above 1.0 as elevated and above 2.0 as heavily leveraged, and it does not account for sector differences.
 
 ![System diagram](System%20Diagram.png)
  
 ## Tech Stack
  
 - **Language:** Python 3.9 or newer
-- **Libraries:** `yfinance` (data), `pandas` (table handling and cleaning), `logging` (Python standard library, used for error handling)
+- **Libraries:** `yfinance` (live payout ratio and debt-to-equity data), `logging` (Python standard library, used to silence yfinance's raw error output)
 - **External tools:** Yahoo Finance data through `yfinance` (free, no API key needed)
 - **Data storage:** none. Data is fetched live on every run and nothing is saved to disk.
+
+## Roadmap
+
+- [x] Classify tickers by payout ratio
+- [x] Do not allow negative payout ratios (Issue #6)
+- [x] Separate 0% payout as "no record of dividend payout" (Issue #8)
+- [x] Catch yfinance errors so one error does not stop the run (Issue #4)
+- [x] Let the user enter their own tickers (Issue #11)
+- [x] Add debt-to-equity as a second safety check and show user why a ticker is classified as risky (Issue #13)
 
 ## Setup
  
