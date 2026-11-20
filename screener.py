@@ -55,20 +55,30 @@ def classify(ratio, debt_to_equity): # using the factors given, classify each as
         return "safe"
 
 
+def format_row(ticker, factors, label): # Create one line per ticker and also tell user why it as risky (Issue #13)
+    ratio, debt = factors["payout_ratio"], factors["debt_to_equity"]
+    payout_text = "n/a" if ratio is None else f"{ratio:.0%}"
+    debt_text = "n/a" if debt is None else f"{debt / 100:.1f}x" # yfinance gives percentage so it is changed to a multiple to be consistant with how it is described
+    row = f"{ticker:<6}{payout_text:>6}  D/E {debt_text:>5}"
+
+    if label == "risky":
+        row += "  fails: " + ", ".join(failed_checks(ratio, debt))
+
+    return row
+
+
 def main(): # main func! here is where the pizzaz happens :) (we need some fun in coding comments!)
     
     groups = {"safe": [], "risky": [], NO_DIVIDEND: [], "skipped": []} # init dict that will be used for classify tickers into their groups (added new classification to fix issue#8)
     
     for ticker in get_tickers(): # iterate through user's tickers and get the payout ratio and group it into 'safe', 'risky', or 'skipped'
         factors = fetch_factors(ticker)
-        ratio = factors["payout_ratio"]
-        groups[classify(ratio, factors["debt_to_equity"])].append((ticker, ratio))
+        groups[classify(factors["payout_ratio"], factors["debt_to_equity"])].append((ticker, factors))
 
     for name, rows in groups.items(): # iterate the groups dict to print each type of stock to the user
         print(f"\n== {name.upper()} ({len(rows)}) ==")
-        for ticker, ratio in rows:
-            shown = "n/a" if ratio is None else f"{ratio:.0%}"
-            print(f"{ticker:<6}{shown:>6}")
+        for ticker, factors in rows:
+            print(format_row(ticker, factors, name))
 
 
 if __name__ == "__main__":
