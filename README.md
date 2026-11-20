@@ -13,10 +13,10 @@ One of the issues I have had is understanding which stocks to pick for long-term
 
 **In scope**
  
-- Find and code in the list of 20 stock tickers for stocks 
+- Find and code in a list of 20 stock tickers (later replaced by user-entered tickers, see "What Changed From the Plan")
 - Pull the data for each ticker from a free api
 - Do data cleaning and skip tickers with missing data rather than assuming
-- Printing Raw Dataframe post data cleaning step to have some output that we can verify
+- Print the cleaned data so there is output we can verify (built as grouped text output instead of a DataFrame)
 - Test factors like a payout ratio between 0% and 60% is safe. Negative or above 60% is risky. Exactly 0%  is no record of dividend payout (not 'risky', since the stock itself may still be an ok investment). 
 
 **Out of scope**
@@ -54,8 +54,16 @@ If debt-to-equity is missing (some companies do not report it), that check is ig
 - [x] Do not allow negative payout ratios (Issue #6)
 - [x] Separate 0% payout as "no record of dividend payout" (Issue #8)
 - [x] Catch yfinance errors so one error does not stop the run (Issue #4)
-- [x] Let the user enter their own tickers (Issue #11)
-- [x] Add debt-to-equity as a second safety check and show user why a ticker is classified as risky (Issue #13)
+- [x] Let the user enter their own tickers (Schedule feature, Issue #11)
+- [x] Add debt-to-equity as a second safety check and show user why a ticker is classified as risky (Schedule feature: use multiple factors, Issue #13)
+
+## What Changed From the Plan
+
+- **Tickers:** the plan was a hardcoded list of 20. The final tool asks the user to type any tickers.
+- **Output:** the plan was a pandas DataFrame, sorted and formatted as a table. The final tool prints grouped rows with no pandas, and shows why a ticker is risky.
+- **Factors:** the plan used yield and payout ratio. The final tool uses payout ratio and debt-to-equity.
+- **Labels:** the plan had safe and risky. The final tool also has "no record of dividend payout" and "skipped".
+- **Errors:** the plan had an internet check that exits. The final tool catches errors per ticker and skips only the bad one.
 
 ## Setup
  
@@ -99,6 +107,10 @@ FAKEXYZ   n/a  D/E   n/a
 
 Each row shows the ticker, its payout ratio, and its debt-to-equity (D/E). Numbers come from live data, so they change over time. Entering nothing exits with an error message, and a ticker that cannot be found is skipped instead of stopping the run.
  
+## Demo
+
+TODO: add video walkthrough link here before submitting.
+
 ## Author
  
 Kanishk Thamman
